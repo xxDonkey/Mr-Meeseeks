@@ -1,4 +1,5 @@
 import discord
+import random
 
 from utils import permissions
 from utils import default
@@ -22,4 +23,21 @@ class Embed(discord.Embed):
         self.set_footer(text=f'Support: {self.config.bot_author}', icon_url=bot.user.avatar_url_as(size=1024))
         self.timestamp = default.get_timestamp()
 
-    
+class Queue():
+    def __init__(self):
+        self.q = []
+
+    def __str__(self):
+        return self.q.__str__()
+
+    def add(self, audio_player):
+        self.q.append(audio_player)
+
+    def remove(self):
+        pass
+
+    def shuffle(self):
+        random.shuffle(self.q)
+
+
+
