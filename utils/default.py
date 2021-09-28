@@ -6,14 +6,21 @@ from datetime import datetime
 from collections import namedtuple
 from discord.utils import find
 
-def get(file='config.json'):
-    try:
-        with open(file, encoding='utf8') as data:
-            return json.load(data, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
-    except AttributeError:
-        raise AttributeError("Unknown argument")
-    except FileNotFoundError:
-        raise FileNotFoundError("JSON file wasn't found")
+def get(file='config.json', named_tuple=True):
+    if named_tuple:
+        try:
+            with open(file, encoding='utf8') as data:
+                return json.load(data, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+        except AttributeError:
+            raise AttributeError("Unknown argument")
+        except FileNotFoundError:
+            raise FileNotFoundError("JSON file wasn't found")
+    else:
+        try:
+            with open(file, encoding='utf8') as data:
+                return json.load(data)
+        except FileNotFoundError:
+            raise FileNotFoundError("JSON file wasn't found")
 
 config = get()
 
