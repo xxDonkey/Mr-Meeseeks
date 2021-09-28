@@ -1,5 +1,4 @@
 import json
-import pytz
 import math
 import traceback as tb
 
@@ -24,7 +23,5 @@ def get_traceback(err, advanced: bool=True):
     error = ('```py\n{1}{0}: {2}\n```').format(type(err).__name__, trace, err)
     return error if advanced else f"{type(err).__name__}: {err}"
 
-def get_timestamp():
-    timezone = pytz.timezone(config.timezone)
-    return timezone.localize(datetime.now())
+
 
