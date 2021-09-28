@@ -40,8 +40,5 @@ class Events(commands.Cog):
         elif isinstance(err, errors.CommandNotFound):
             pass
 
-    
-
-
 def setup(bot):
     bot.add_cog(Events(bot))
