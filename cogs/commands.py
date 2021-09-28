@@ -15,6 +15,10 @@ class Events(commands.Cog):
         channel = ctx.message.author.voice.voice_channel
         await channel.connect()
 
+    @commands.command(aliases=['disconnect', 'dis'])
+    async def disconnect(self, ctx):
+        await ctx.voice_client.disconnect()
+
     @commands.command(aliases=['play', 'p'])
     def play(self, ctx, to_play):
 
