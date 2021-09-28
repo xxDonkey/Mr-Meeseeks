@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord.ext.commands import errors
 from utils import default 
 
-class Events(commands.Cog):
+class Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = default.get()
@@ -34,4 +34,4 @@ class Events(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Events(bot))
+    bot.add_cog(Commands(bot))
