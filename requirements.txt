@@ -1,0 +1,4 @@
+dotenv
+youtube_dl
+discord
+datetime
