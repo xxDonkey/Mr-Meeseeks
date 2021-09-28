@@ -10,17 +10,17 @@ class Commands(commands.Cog):
         self.config = default.get()
 
     """ Joins the voice channel of the user who entered the command. """
-    @commands.command(aliases=['join', 'j'])
+    @commands.command(aliases=['j'])
     async def join(self, ctx):
         channel = ctx.message.author.voice.voice_channel
         await channel.connect()
 
-    @commands.command(aliases=['disconnect', 'dis'])
+    @commands.command(aliases=['dis'])
     async def disconnect(self, ctx):
         await ctx.voice_client.disconnect()
 
-    @commands.command(aliases=['play', 'p'])
-    def play(self, ctx, to_play):
+    @commands.command(aliases=['p'])
+    async def play(self, ctx, to_play):
 
         # check if its a link
 
