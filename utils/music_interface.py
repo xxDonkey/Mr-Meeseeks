@@ -6,8 +6,10 @@ ytdl = youtube_dl.YoutubeDL(
     default.get(file='ytdl_format.json', named_tuple=False)
 )
 
-def from_url():
+""" Returns a Discord audio player from a Youtube link. """
+def from_url(url):
     pass
 
+""" Returns a Discord audio player from a Youtube keyword. """
 def from_search():
     pass
