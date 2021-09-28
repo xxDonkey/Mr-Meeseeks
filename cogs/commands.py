@@ -9,6 +9,12 @@ class Events(commands.Cog):
         self.bot = bot
         self.config = default.get()
 
+    """ Joins the voice channel of the user who entered the command. """
+    @commands.command(aliases=['join', 'j'])
+    async def join(self, ctx):
+        channel = ctx.message.author.voice.voice_channel
+        await channel.connect()
+
     @commands.command(aliases=['play', 'p'])
     def play(self, ctx, to_play):
 
