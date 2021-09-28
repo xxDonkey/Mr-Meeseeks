@@ -4,7 +4,6 @@ from utils import permissions
 from utils import default
 from discord.ext.commands import Bot
 
-
 class Bot(Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
