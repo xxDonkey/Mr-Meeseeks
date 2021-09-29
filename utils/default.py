@@ -26,6 +26,3 @@ def get_traceback(err, advanced: bool=True):
     error = ('```py\n{1}{0}: {2}\n```').format(type(err).__name__, trace, err)
     return error if advanced else f"{type(err).__name__}: {err}"
 
-
-
-print(validator('https://www.youtube.com/watch?v=3f84K2yiUE'))
