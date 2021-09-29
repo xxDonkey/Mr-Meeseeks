@@ -6,6 +6,10 @@ ytdl = youtube_dl.YoutubeDL(
     default.get(file='ytdl_format.json', named_tuple=False)
 )
 
+ffmpeg_options = {
+    'options': '-vn'
+}
+
 """ Returns a Discord audio player from a Youtube link. """
 def from_url(url):
     pass
