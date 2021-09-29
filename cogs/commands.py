@@ -23,33 +23,54 @@ class Commands(commands.Cog):
     async def disconnect(self, ctx):
         await ctx.voice_client.disconnect()
 
-    """ Plays the requested song immediately. Pauses the queue. """
+    """ Plays the requested song immediately. Skips the current song, and pauses the queue. """
     @commands.command(aliases=['fp'])
     async def forceplay(self, ctx, to_play):
-        to_play = to_play.lower()
-        player = None
+        # queue song next
+        self.q.add(to_play, 1) 
 
-        # check if its a link -- rudimentary test here, get smth better
-        if to_play.startswith('https://'):
-            # check if its youtube
-            if to_play.contains('youtube'):
-                player = music_interface.from_url_yt(to_play)
-
-            # check if its spotify
-            elif to_play.contains('spotify'):
-                player = music_interface.from_url_spotify()(to_play)
-
-        # if not a link, search youtube
-        else:
-            player = music_interface.from_search(to_play)
-
-      # player should not contain the audio player
+        # skip to next song
+        self.skip()
 
     """ Adds a song to the queue. """
     @commands.command(aliases=['p'])
     async def play(self, ctx, to_add):
-        
-        pass
+        # add to end of the queue
+        self.q.add(to_add)
+
+        # start playing if we aren't already
+        if not ctx.voice_client.isplaying():
+            self.q.play_next(ctx)
+
+    """ Skips the current song in the queue. """
+    @commands.command(aliases=['s'])
+    async def skip(self, ctx):
+        # stop the audio that is playing
+        if ctx.voice_client.isplaying():
+            ctx.voice_client.stop()
+
+        # remove the current song
+        self.q.remove()
+
+        # play the next song
+        self.q.play_next(ctx)
+
+    """         Checks if the bot is in a voice channel.        """
+    """ Called before 'forceplay,' 'play,' or 'skip' is called. """
+    @forceplay.before_invoke
+    @play.before_invoke
+    @skip.before_invoke
+    async def ensure_voice_channel(self, ctx):
+        # if not connected to voice
+        if ctx.voice_client is None:
+            # and the commander is in a channel, connect to it
+            if ctx.author.voice:
+                await ctx.author.voice.channel.connect()
+
+            # otherwise error
+            else:
+                await ctx.send("You are not connected to a voice channel.")
+                raise commands.CommandError("Author not connected to a voice channel.")
 
 def setup(bot):
     bot.add_cog(Commands(bot))
