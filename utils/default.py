@@ -3,7 +3,6 @@ import math
 import traceback as tb
 
 from collections import namedtuple
-from discord.utils import find
 
 def get(file='config.json', named_tuple=True):
     if named_tuple:
@@ -21,8 +20,6 @@ def get(file='config.json', named_tuple=True):
         except FileNotFoundError:
             raise FileNotFoundError("JSON file wasn't found")
 
-config = get()
-
 # debug tool
 def get_traceback(err, advanced: bool=True):
     trace = ''.join(tb.format_tb(err.__traceback__))
@@ -31,3 +28,4 @@ def get_traceback(err, advanced: bool=True):
 
 
 
+print(validator('https://www.youtube.com/watch?v=3f84K2yiUE'))
