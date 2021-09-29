@@ -22,7 +22,6 @@ class Embed(discord.Embed):
         self.config = default.get()
 
         self.set_footer(text=f'Support: {self.config.bot_author}', icon_url=bot.user.avatar_url_as(size=1024))
-        self.timestamp = default.get_timestamp()
 
 class Queue():
     def __init__(self):
