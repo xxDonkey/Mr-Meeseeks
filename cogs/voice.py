@@ -1,15 +1,13 @@
 import discord
 
 from discord.ext import commands
-from discord.ext.commands import errors
 from utils import default 
 from utils import music_interface
 from utils.data import Queue
 
-class Commands(commands.Cog):
+class Voice(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.config = default.get()
         self.q = Queue()
 
     """ Joins the voice channel of the user who entered the command. """
@@ -73,4 +71,4 @@ class Commands(commands.Cog):
                 raise commands.CommandError("Author not connected to a voice channel.")
 
 def setup(bot):
-    bot.add_cog(Commands(bot))
+    bot.add_cog(Voice(bot))
