@@ -2,7 +2,6 @@ import json
 import math
 import traceback as tb
 
-from datetime import datetime
 from collections import namedtuple
 from discord.utils import find
 
