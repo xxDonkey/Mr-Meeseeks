@@ -1,10 +1,12 @@
+import asyncio
+import discord
 import youtube_dl
 
 from utils import default
+from youtube_search import YoutubeSearch
 
 # Silence console warning errors 
 youtube_dl.utils.bug_reports_message = lambda: ''
-
 
 ytdl = youtube_dl.YoutubeDL(
     default.get(file='ytdl_format.json', named_tuple=False)
@@ -13,13 +15,32 @@ ytdl = youtube_dl.YoutubeDL(
 ffmpeg_opts = default.get(file='ffmpeg_opts.json', named_tuple=False)
 
 """ Returns a Discord audio player from a Youtube link. """
-def from_url_yt(url):
-    pass
+async def from_url_yt(url, loop=None):
+    loop = loop or asyncio.get_event_loop()
+    data = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
+
+    # if its a playlist, take first entry
+    if 'entries' in data:
+        data = data['entries'][0]
+
+    filename = ytdl.prepare_filename(data)
+    return discord.PCMVolumeTransformer(
+        discord.FFmpegPCMAudio(filename **ffmpeg_opts),
+        data=data
+    )
+    
 
 """ Returns a Discord audio player from a Spotify link. """
-def from_url_spotify(url):
+async def from_url_spotify(url, loop=None):
     pass
 
 """ Returns a Discord audio player from a Youtube keyword. """
-def from_search():
-    pass
+async def from_search(search, loop=None):
+    # search youtube for the URL
+    url_result = YoutubeSearch(search, max_results=1).to_dict()[0]
+
+    # get the link's source
+    return from_url_yt(url_result)
+
+    
+    
