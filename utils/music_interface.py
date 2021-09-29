@@ -7,7 +7,11 @@ ytdl = youtube_dl.YoutubeDL(
 )
 
 """ Returns a Discord audio player from a Youtube link. """
-def from_url(url):
+def from_url_yt(url):
+    pass
+
+""" Returns a Discord audio player from a Spotify link. """
+def from_url_spotify(url):
     pass
 
 """ Returns a Discord audio player from a Youtube keyword. """
