@@ -20,6 +20,9 @@ def get(file='config.json', named_tuple=True):
         except FileNotFoundError:
             raise FileNotFoundError("JSON file wasn't found")
 
+def clamp(n, minn, maxn):
+    return max(min(maxn, n), minn)
+
 # debug tool
 def get_traceback(err, advanced: bool=True):
     trace = ''.join(tb.format_tb(err.__traceback__))
