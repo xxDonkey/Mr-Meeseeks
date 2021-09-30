@@ -1,5 +1,5 @@
 dotenv
 discord
 youtube_dl
-youtube_search
+youtube-search
 ffmpeg
