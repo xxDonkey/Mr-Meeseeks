@@ -8,7 +8,7 @@ from utils.data import Queue
 class Voice(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.q = Queue()
+        self.q = Queue(bot)
 
     """ Joins the voice channel of the user who entered the command. """
     @commands.command(aliases=['j'])
