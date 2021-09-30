@@ -15,8 +15,7 @@ class Utility(commands.Cog):
 
         user = '{0.user}'.format(self.bot)
         response = f'{user} has a response time of {self.bot.latency} ' + (':exclamation: ' * level)
-
-       
+        await ctx.channel.send(response)
 
 def setup(bot):
     bot.add_cog(Utility(bot))
