@@ -24,7 +24,8 @@ class Embed(discord.Embed):
         self.set_footer(text=f'Support: {self.config.bot_author}', icon_url=bot.user.avatar_url_as(size=1024))
 
 class Queue():
-    def __init__(self):
+    def __init__(self, bot):
+        self.bot = bot
         self.q = []
         self.ctx = None
 
@@ -50,15 +51,15 @@ class Queue():
         if to_play.startswith('https://'):
             # check if its youtube
             if to_play.contains('youtube'):
-                audio_source = await music_interface.from_url_yt(to_play)
+                audio_source = await music_interface.from_url_yt(to_play, loop=self.bot.loop)
 
             # check if its spotify
             elif to_play.contains('spotify'):
-                audio_source = await music_interface.from_url_spotify()(to_play)
+                audio_source = await music_interface.from_url_spotify(to_play, loop=self.bot.loop)
 
         # if not a link, search youtube
         else:
-            audio_source = await music_interface.from_search(to_play)
+            audio_source = await music_interface.from_search(to_play, loop=self.bot.loop)
 
         self.q.insert(audio_source, index)
 
