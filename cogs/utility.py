@@ -11,10 +11,11 @@ class Utility(commands.Cog):
     """ Gets the latency of the bot. """
     @commands.command()
     async def ping(self, ctx):
-        level = default.clamp(math.floor(self.bot.latency / 50), 0, 4)
+        latency = self.bot.latency * 1000 # convert to ms
+        level = default.clamp(math.floor(latency / 50), 0, 4)
 
         user = '{0.user}'.format(self.bot)
-        response = f'{user} has a response time of {self.bot.latency} ' + (':exclamation: ' * level)
+        response = f'{user} has a response time of {math.round(latency)} ' + (':exclamation: ' * level)
         await ctx.channel.send(response)
 
 def setup(bot):
