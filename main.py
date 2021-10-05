@@ -1,5 +1,5 @@
 import os
-import pynacl
+import nacl
 
 from dotenv import load_dotenv
 from utils.data import Bot
