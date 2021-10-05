@@ -30,15 +30,19 @@ class Voice(commands.Cog):
         # skip to next song
         self.skip()
 
+        await ctx.channel.send(f':musical_note: Playing {to_play} :musical_note: ')
+
     """ Adds a song to the queue. """
     @commands.command(aliases=['p'])
-    async def play(self, ctx, to_add):
+    async def play(self, ctx, to_play):
         # add to end of the queue
-        self.q.add(to_add)
+        await self.q.add(to_play)
 
         # start playing if we aren't already
-        if not ctx.voice_client.isplaying():
-            self.q.play_next(ctx)
+        if not ctx.voice_client.is_playing():
+            await self.q.play_next(ctx)
+
+        await ctx.channel.send(f':musical_note: Playing {to_play} :musical_note: ')
 
     """ Skips the current song in the queue. """
     @commands.command(aliases=['s'])
@@ -52,6 +56,8 @@ class Voice(commands.Cog):
 
         # play the next song
         self.q.play_next(ctx)
+
+        await ctx.channel.send(f':track_next: Skipping! :track_next: ')
 
     """         Checks if the bot is in a voice channel.        """
     """ Called before 'forceplay,' 'play,' or 'skip' is called. """
