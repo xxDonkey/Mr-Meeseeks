@@ -28,10 +28,7 @@ async def from_url_yt(url, loop=None):
         data = data['entries'][0]
 
     filename = ytdl.prepare_filename(data)
-    return discord.PCMVolumeTransformer(
-        discord.FFmpegPCMAudio(filename, **ffmpeg_opts),
-        data=data
-    )
+    return discord.FFmpegPCMAudio(filename, **ffmpeg_opts)
     
 
 """ Returns a Discord audio player from a Spotify link. """
