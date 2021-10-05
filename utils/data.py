@@ -37,31 +37,32 @@ class Queue():
             # queue is empty
             return
 
-        ctx.voice_client.play(self.q[0], after=after_play)
+        ctx.voice_client.play(self.q[0], after=self.after_play)
 
-    async def after_play(self, e):
+    def after_play(self, e):
         self.remove()
 
-
     async def add(self, to_add, index=0):
-        to_play = to_play.lower()
         audio_source = None
 
         # check if its a link -- rudimentary test here, get smth better
-        if to_play.startswith('https://'):
+        if to_add.startswith('https://'):
             # check if its youtube
-            if to_play.contains('youtube'):
-                audio_source = await music_interface.from_url_yt(to_play, loop=self.bot.loop)
+            if 'youtube' in to_add:
+                audio_source = await music_interface.from_url_yt(to_add, loop=self.bot.loop)
 
             # check if its spotify
-            elif to_play.contains('spotify'):
-                audio_source = await music_interface.from_url_spotify(to_play, loop=self.bot.loop)
+            elif 'spotify' in to_add:
+                audio_source = await music_interface.from_url_spotify(to_add, loop=self.bot.loop)
 
         # if not a link, search youtube
         else:
-            audio_source = await music_interface.from_search(to_play, loop=self.bot.loop)
+            audio_source = await music_interface.from_search(to_add, loop=self.bot.loop)
 
-        self.q.insert(audio_source, index)
+        if not audio_source:
+            raise Exception(f'Audio source not found for {to_add}')
+
+        self.q.insert(index, audio_source)
 
     def remove(self, index=0):
         self.q.pop(index)
