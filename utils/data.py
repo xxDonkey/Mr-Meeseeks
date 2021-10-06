@@ -8,6 +8,7 @@ from utils import music_interface
 
 class Bot(Bot):
     def __init__(self, *args, **kwargs):
+        self.q = Queue(self)
         super().__init__(*args, **kwargs)
 
     async def on_message(self, msg):
@@ -37,32 +38,32 @@ class Queue():
             # queue is empty
             return
 
-        ctx.voice_client.play(self.q[0], after=self.after_play)
+        ctx.voice_client.play(self.q[0][0])
 
-    def after_play(self, e):
-        self.remove()
-
+    # info is a list containing [ name , url ]
     async def add(self, to_add, index=0):
-        audio_source = None
+        audio_source, url = None, ''
 
         # check if its a link -- rudimentary test here, get smth better
         if to_add.startswith('https://'):
             # check if its youtube
             if 'youtube' in to_add:
-                audio_source = await music_interface.from_url_yt(to_add, loop=self.bot.loop)
+                audio_source, url = await music_interface.from_url_yt(to_add, loop=self.bot.loop)
 
             # check if its spotify
             elif 'spotify' in to_add:
-                audio_source = await music_interface.from_url_spotify(to_add, loop=self.bot.loop)
+                audio_source, url = await music_interface.from_url_spotify(to_add, loop=self.bot.loop)
 
         # if not a link, search youtube
         else:
-            audio_source = await music_interface.from_search(to_add, loop=self.bot.loop)
+            audio_source, url = await music_interface.from_search(to_add, loop=self.bot.loop)
 
-        if not audio_source:
+        if not audio_source or not url:
             raise Exception(f'Audio source not found for {to_add}')
 
-        self.q.insert(index, audio_source)
+        self.q.insert(index, (audio_source, [ to_add, url ]))
+
+        return url
 
     def remove(self, index=0):
         self.q.pop(index)
@@ -70,5 +71,8 @@ class Queue():
     def shuffle(self):
         random.shuffle(self.q)
 
-
-
+    def get_q(self):
+        q = []
+        for song in self.q:
+            q.insert(0, song[1])
+        return q
