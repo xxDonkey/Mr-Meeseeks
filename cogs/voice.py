@@ -3,12 +3,10 @@ import discord
 from discord.ext import commands
 from utils import default 
 from utils import music_interface
-from utils.data import Queue
 
 class Voice(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.q = Queue(bot)
 
     """ Joins the voice channel of the user who entered the command. """
     @commands.command(aliases=['j'])
@@ -24,38 +22,41 @@ class Voice(commands.Cog):
     """ Plays the requested song immediately. Skips the current song, and pauses the queue. """
     @commands.command(aliases=['fp'])
     async def forceplay(self, ctx, to_play):
-        # queue song next
-        self.q.add(to_play, 1) 
+        # queue song next and get the url
+        url = await self.bot.q.add(to_play, 1) 
 
         # skip to next song
         self.skip()
 
-        await ctx.channel.send(f':musical_note: Playing {to_play} :musical_note: ')
+        await ctx.channel.send(f':musical_note:   Playing {to_play}   :musical_note:\n{url}')
 
     """ Adds a song to the queue. """
     @commands.command(aliases=['p'])
-    async def play(self, ctx, to_play):
-        # add to end of the queue
-        await self.q.add(to_play)
+    async def play(self, ctx, *to_play):
+        to_play = ' '.join(to_play)
+
+        # add to end of the queue and get the url
+        url = await self.bot.q.add(to_play)
 
         # start playing if we aren't already
         if not ctx.voice_client.is_playing():
-            await self.q.play_next(ctx)
+            await self.bot.q.play_next(ctx)
 
-        await ctx.channel.send(f':musical_note: Playing {to_play} :musical_note: ')
+
+        await ctx.channel.send(f':musical_note:   Playing {to_play}   :musical_note:\n{url}')
 
     """ Skips the current song in the queue. """
     @commands.command(aliases=['s'])
     async def skip(self, ctx):
         # stop the audio that is playing
-        if ctx.voice_client.isplaying():
+        if ctx.voice_client.is_playing():
             ctx.voice_client.stop()
 
         # remove the current song
-        self.q.remove()
+        self.bot.q.remove()
 
         # play the next song
-        self.q.play_next(ctx)
+        # await self.bot.q.play_next(ctx)
 
         await ctx.channel.send(f':track_next: Skipping! :track_next: ')
 
