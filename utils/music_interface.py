@@ -27,7 +27,7 @@ async def from_url_yt(url, loop=None):
     if 'entries' in data:
         data = data['entries'][0]
 
-    filename = ytdl.prepare_filename(data)
+    filename = data['url'] # ytdl.prepare_filename(data)
     return discord.FFmpegPCMAudio(filename, **ffmpeg_opts)
     
 
