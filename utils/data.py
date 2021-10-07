@@ -38,7 +38,9 @@ class Queue():
             # queue is empty
             return
 
-        ctx.voice_client.play(self.q[0][0])
+        # ctx.voice_client.play(self.q[0][0])
+
+        self.voice_state.channel.guild.voice_client.play(self.q[0][0])
 
     # info is a list containing [ name , url ]
     async def add(self, to_add, index=0):
