@@ -42,7 +42,6 @@ class Voice(commands.Cog):
         if not ctx.voice_client.is_playing():
             await self.bot.q.play_next(ctx)
 
-
         await ctx.channel.send(f':musical_note:   Playing {to_play}   :musical_note:\n{url}')
 
     """ Skips the current song in the queue. """
