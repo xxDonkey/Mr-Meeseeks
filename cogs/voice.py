@@ -111,7 +111,6 @@ class Voice(commands.Cog):
     @tasks.loop(seconds=1/20)
     async def check_song_finished(self):
         if self.bot.q.finished:
-            print('Called "check_song_finished"')
             self.bot.q.remove()
             await self.bot.q.play_next()
             self.bot.q.finished = False

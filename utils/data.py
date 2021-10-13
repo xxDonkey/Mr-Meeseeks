@@ -43,7 +43,6 @@ class Queue():
 
     def on_song_finished(self, e):
         self.finished = True
-        print('Called "on_song_finished"')
 
     async def add(self, to_add):
         audio_source, url = None, ''
