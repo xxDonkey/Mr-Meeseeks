@@ -14,6 +14,13 @@ class Events(commands.Cog):
         print("Sucessfully logged in.")
 
     @commands.Cog.listener()
+    async def on_voice_state_update(self, member, before, after):
+        if member != self.bot.user:
+            return
+
+        self.bot.q.voice_state = after
+
+    @commands.Cog.listener()
     async def on_command_error(self, ctx, err):
         if isinstance(err, errors.MissingRequiredArgument) or isinstance(err, errors.BadArgument) or isinstance(err, errors.TooManyArguments):
             cmd = str(ctx.invoked_subcommand) if ctx.invoked_subcommand else str(ctx.command)
