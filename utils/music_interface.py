@@ -28,7 +28,7 @@ async def from_url_yt(url, loop=None):
         data = data['entries'][0]
 
     filename = data['url'] # ytdl.prepare_filename(data)
-    return (discord.FFmpegPCMAudio(filename, **ffmpeg_opts), url)
+    return (discord.FFmpegPCMAudio(filename, **ffmpeg_opts), data['title'])
     
 
 """ Returns a Discord audio player from a Spotify link. """
@@ -38,11 +38,18 @@ async def from_url_spotify(url, loop=None):
 """ Returns a Discord audio player from a Youtube keyword. """
 async def from_search(search, loop=None):
     # search youtube for the URL
-    data = YoutubeSearch(search, max_results=1).to_dict()[0]
-    url = 'https://www.youtube.com' + data['url_suffix']
+    data: dict
+
+    try:
+        data = YoutubeSearch(search, max_results=1).to_dict()[0]
+        url = 'https://www.youtube.com' + data['url_suffix']
+    except IndexError | KeyError:
+        return None
 
     # get the link's source
-    return await from_url_yt(url)
+    source, title = await from_url_yt(url)
+
+    return (source, title, url)
 
     
     
