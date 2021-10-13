@@ -1,18 +1,22 @@
 import discord
 
-from discord.ext import commands
+from discord.ext import commands, tasks
 from utils import default 
 from utils import music_interface
 
 class Voice(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.check_song_finished.start()
 
     """ Joins the voice channel of the user who entered the command. """
     @commands.command(aliases=['j'])
     async def join(self, ctx):
-        channel = ctx.author.voice.channel
-        await channel.connect()
+        try:
+            channel = ctx.author.voice.channel
+            await channel.connect()
+        except discord.errors.ClientException:
+            pass
 
     """ Disconnects the bot from the currently joined channel. """
     @commands.command(aliases=['dis'])
@@ -21,18 +25,28 @@ class Voice(commands.Cog):
 
     """ Plays the requested song immediately. Skips the current song, and pauses the queue. """
     @commands.command(aliases=['fp'])
-    async def forceplay(self, ctx, to_play):
+    async def forceplay(self, ctx, to_play):\
+        # join the channel
+        await self.join(ctx)
+
         # queue song next and get the url
         url = await self.bot.q.add(to_play, 1) 
 
         # skip to next song
         self.skip()
 
-        await ctx.channel.send(f':musical_note:   Playing {to_play}   :musical_note:\n{url}')
+        # get next song info
+        _, info = self.bot.q.q[0]
+        to_play, url = info
+
+        await ctx.channel.send(f':musical_note:   Playing __**"{to_play}"**__   :musical_note:\n{url}')
 
     """ Adds a song to the queue. """
     @commands.command(aliases=['p'])
     async def play(self, ctx, *to_play):
+        # join the channel
+        await self.join(ctx)
+
         to_play = ' '.join(to_play)
 
         # add to end of the queue and get the url
@@ -40,10 +54,13 @@ class Voice(commands.Cog):
 
         # start playing if we aren't already
         if not ctx.voice_client.is_playing():
-            await self.bot.q.play_next(ctx)
+            await self.bot.q.play_next()
 
+        # get next song info
+        _, info = self.bot.q.q[0]
+        to_play, url = info
 
-        await ctx.channel.send(f':musical_note:   Playing {to_play}   :musical_note:\n{url}')
+        await ctx.channel.send(f':musical_note:   Playing __**"{to_play}"**__   :musical_note:\n{url}')
 
     """ Skips the current song in the queue. """
     @commands.command(aliases=['s'])
@@ -56,9 +73,18 @@ class Voice(commands.Cog):
         self.bot.q.remove()
 
         # play the next song
-        # await self.bot.q.play_next(ctx)
+        await self.bot.q.play_next()
 
-        await ctx.channel.send(f':track_next: Skipping! :track_next: ')
+        await ctx.channel.send(f':track_next: Skipping! :track_next:')
+
+        if self.bot.q.q == []:
+            return
+
+        # get next song info
+        _, info = self.bot.q.q[0]
+        to_play, url = info
+
+        await ctx.channel.send(f':musical_note:   Playing __**"{to_play}"**__   :musical_note:\n{url}')
 
     """         Checks if the bot is in a voice channel.        """
     """ Called before 'forceplay,' 'play,' or 'skip' is called. """
@@ -76,6 +102,13 @@ class Voice(commands.Cog):
             else:
                 await ctx.send("You are not connected to a voice channel.")
                 raise commands.CommandError("Author not connected to a voice channel.")
+
+    @tasks.loop(seconds=1/20)
+    async def check_song_finished(self):
+        if self.bot.q.finished:
+            print('finished')
+            await self.bot.q.play_next()
+            self.bot.q.finished = False
 
 def setup(bot):
     bot.add_cog(Voice(bot))
