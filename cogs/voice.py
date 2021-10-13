@@ -36,7 +36,7 @@ class Voice(commands.Cog):
         self.skip()
 
         # get next song info
-        _, info = self.bot.q.q[0]
+        _, info = self.bot.q.q[-1]
         to_play, url = info
 
         await ctx.channel.send(f':musical_note:   Playing __**"{to_play}"**__   :musical_note:\n{url}')
@@ -57,7 +57,7 @@ class Voice(commands.Cog):
             await self.bot.q.play_next()
 
         # get next song info
-        _, info = self.bot.q.q[0]
+        _, info = self.bot.q.q[-1]
         to_play, url = info
 
         await ctx.channel.send(f':musical_note:   Playing __**"{to_play}"**__   :musical_note:\n{url}')
@@ -75,13 +75,13 @@ class Voice(commands.Cog):
         # play the next song
         await self.bot.q.play_next()
 
-        await ctx.channel.send(f':track_next: Skipping! :track_next:')
+        await ctx.channel.send(f':track_next:   Skipping!   :track_next:')
 
         if self.bot.q.q == []:
             return
 
         # get next song info
-        _, info = self.bot.q.q[0]
+        _, info = self.bot.q.q[-1]
         to_play, url = info
 
         await ctx.channel.send(f':musical_note:   Playing __**"{to_play}"**__   :musical_note:\n{url}')
@@ -106,7 +106,8 @@ class Voice(commands.Cog):
     @tasks.loop(seconds=1/20)
     async def check_song_finished(self):
         if self.bot.q.finished:
-            print('finished')
+            print('Called "check_song_finished"')
+            self.bot.q.remove()
             await self.bot.q.play_next()
             self.bot.q.finished = False
 
