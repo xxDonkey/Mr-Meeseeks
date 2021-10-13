@@ -86,6 +86,11 @@ class Voice(commands.Cog):
 
         await ctx.channel.send(f':musical_note:   Playing __**"{to_play}"**__   :musical_note:\n{url}')
 
+    """ Shuffles the queue. """
+    @commands.command()
+    async def shuffle(self):
+        self.bot.q.shuffle()
+
     """         Checks if the bot is in a voice channel.        """
     """ Called before 'forceplay,' 'play,' or 'skip' is called. """
     @forceplay.before_invoke
