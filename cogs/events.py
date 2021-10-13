@@ -9,17 +9,25 @@ class Events(commands.Cog):
         self.bot = bot
         self.config = default.get()
 
+    """ Called once when the bot logs in. """
     @commands.Cog.listener()
     async def on_ready(self):
+        # set status to "watching !help"
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{self.config.prefix}help"))
+
         print("Sucessfully logged in.")
 
+    """ Called whenever any user in any guild changes voice channels. """
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
+        # if its not the bot, return
         if member != self.bot.user:
             return
 
+        # set the queue's voice state to the new voice state
         self.bot.q.voice_state = after
 
+    """ Called when an error is encountered when handling a command request. """
     @commands.Cog.listener()
     async def on_command_error(self, ctx, err):
         if isinstance(err, errors.MissingRequiredArgument) or isinstance(err, errors.BadArgument) or isinstance(err, errors.TooManyArguments):
