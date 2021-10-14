@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: musicbot
+spec:
+  replicas: 1
+  revisionHistoryLimit: 4
+  selector:
+    matchLabels:
+      app: musicbot
+  template:
+    metadata:
+      labels:
+        app: musicbot
+    spec:
+      containers:
+      - image: 10.230.94.1:32000/musicbot:latest
+        imagePullPolicy: always
+        name: musicbot

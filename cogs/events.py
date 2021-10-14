@@ -14,7 +14,7 @@ class Events(commands.Cog):
     async def on_ready(self):
         # set status to "watching !help"
         await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f"{self.config.prefix}help"))
-
+        
         print("Sucessfully logged in.")
 
     """ Called whenever any user in any guild changes voice channels. """

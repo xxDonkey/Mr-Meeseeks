@@ -31,6 +31,7 @@ class Queue():
         self.ctx = None
         self.voice_state = None
         self.finished = False
+        #discord.opus.load_opus('/usr/local/lib/libopus.dylib')
 
     def __str__(self):
         return self.q.__str__()

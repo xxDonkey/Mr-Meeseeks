@@ -1,6 +1,7 @@
-dotenv
-discord
+python-dotenv
+discord.py[voice]
 youtube_dl
 youtube-search
 ffmpeg
 pynacl
+opuslib

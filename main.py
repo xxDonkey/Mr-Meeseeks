@@ -1,6 +1,5 @@
 import os
 import nacl
-
 from dotenv import load_dotenv
 from utils.data import Bot
 from utils.default import get

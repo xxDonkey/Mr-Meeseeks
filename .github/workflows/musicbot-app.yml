@@ -18,5 +18,7 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
-    - name: Check version.
-      run: python3 --version
+    - name: Docker Image Build and Push to External Registry
+      run: |
+        docker build . -t 10.230.94.1:32000/musicbot:latest
+        docker push 10.230.94.1:32000/musicbot:latest
