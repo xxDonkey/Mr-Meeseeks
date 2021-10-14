@@ -7,32 +7,32 @@ Meant as a small replacement for Rythm or Groovy, and only runs on a couple of s
 
 Below is a full command list.
 
-### `!join | !j`
+### `!join` or `!j`
 
 Joins the voice channel of the user who entered the command. 
 No paremeters.
 
-### `!disconnect | !dis`
+### `!disconnect` or `!dis`
 
 Disconnects the bot from the currently joined channel. 
 No paremeters.
 
-### `!play | !p` 
+### `!play` or `!p` 
 
 Adds a song to the queue.
 Requires a song to be queued
 
-### `!forceplay | !fp`
+### `!forceplay` or `!fp`
 
 Plays the requested song immediately. Skips the current song, and pauses the queue. 
 Requires a song to be played.
 
-### `!skip | !s`
+### `!skip` or `!s`
 
 Skips the current song in the queue. 
 No paremeters.
 
-### `!queue | !q`
+### `!queue` or `!q`
 
 Sends a message containing the queue of songs for that server. 
 No parameters.
