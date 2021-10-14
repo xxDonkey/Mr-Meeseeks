@@ -29,6 +29,7 @@ class Queue():
         self.bot = bot
         self.q = []
         self.ctx = None
+        self.voice_state = None
         self.finished = False
 
     def __str__(self):
