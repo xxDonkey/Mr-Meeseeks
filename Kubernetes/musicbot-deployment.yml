@@ -15,5 +15,5 @@ spec:
     spec:
       containers:
       - image: 10.230.94.1:32000/musicbot:latest
-        imagePullPolicy: always
+        imagePullPolicy: Always
         name: musicbot

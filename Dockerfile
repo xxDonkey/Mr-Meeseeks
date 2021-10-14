@@ -1,5 +1,5 @@
 FROM python:3.9
-LABEL "repository"="https://github.com/xxDonkey/MusicBot"
+LABEL "repository"="https://github.com/xxDonkey/Mr-Meeseeks"
 LABEL "maintainers"="WarpWing and xxDonkey"
 WORKDIR /usr/src/app
 COPY requirements.txt ./
